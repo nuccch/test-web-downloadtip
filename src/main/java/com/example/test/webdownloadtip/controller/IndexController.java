@@ -2,6 +2,9 @@ package com.example.test.webdownloadtip.controller;
 
 import com.alibaba.excel.EasyExcel;
 import com.example.test.webdownloadtip.model.SubjectExport;
+import com.example.test.webdownloadtip.service.ExcelExporter;
+import com.example.test.webdownloadtip.service.SubjectPageQuerier;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +20,9 @@ import java.util.Random;
 
 @Controller
 public class IndexController {
+    @Autowired
+    SubjectPageQuerier subjectPageQuerier;
+
     int total = 1000;
     List<SubjectExport> dataList = new ArrayList<>(total);
     {
@@ -56,6 +62,18 @@ public class IndexController {
             e.printStackTrace();
         }
         EasyExcel.write(response.getOutputStream(), SubjectExport.class).sheet("sheet").doWrite(dataList);
+        return null;
+    }
+
+    // 以分页查询数据库方式导出百万级数据
+    @RequestMapping("/downloadPage")
+    public String downloadByPage(HttpServletRequest request, HttpServletResponse response,
+                                 @RequestParam("name") String name,
+                                 @RequestParam("age") int age) throws IOException {
+        // 使用
+        SubjectExport param = SubjectExport.builder().name(name).age(age).build();
+        String fileName = String.format("%s%s.xlsx", "数据导出", System.currentTimeMillis());
+        new ExcelExporter<SubjectExport>(this.subjectPageQuerier).write(response, fileName, SubjectExport.class, param);
         return null;
     }
 

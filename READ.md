@@ -1,6 +1,7 @@
 # README
 
-演示Web流式方式下载文件时展示提示信息。
+1.演示Web流式方式下载文件时展示提示信息。  
+2.分页查询数据库方式导出百万级数据。  
 
 【参考】  
 https://blog.csdn.net/qq_40527797/article/details/122813537  springBoot+JSP搭建项目  

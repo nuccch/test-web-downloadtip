@@ -63,6 +63,7 @@
     </div>
     <div>
         <button id="btnDownloadXhr">导出</button>
+        <button id="btnPageDownloadXhr">导出百万级数据</button>
     </div>
     <div>
         <table>
@@ -92,12 +93,18 @@
 <script type="text/javascript">
     $(function(){
         $("#btnDownloadXhr").click(function () {
-            downloadXhr();
+            var url = "/download";
+            downloadXhr(url, this);
+        })
+        $("#btnPageDownloadXhr").click(function () {
+            var url = "/downloadPage";
+            downloadXhr(url, this);
         })
     })
 
-    function downloadXhr() {
-        var url = "/download";
+    function downloadXhr(url, btn) {
+        //var url = "/download";
+        var btnTxt = $(btn).text();
         var param = $("#paramForm").serialize();
         var xhr = new XMLHttpRequest();
         xhr.open("POST", url);
@@ -119,6 +126,8 @@
                     $('body').append(a);
                     a.click();
                     $(a).remove();
+                    $(btn).text(btnTxt);
+                    $(btn).removeAttr("disabled");
                 }
             }
         };
@@ -127,6 +136,10 @@
         $.blockUI({
             message: "正在加载数据..."
         });
+        btnTxt = $(btn).text();
+        $(btn).text("加载中...");
+        $(btn).attr("disabled", "true");
+        console.log(btn);
     }
 </script>
 </html>
