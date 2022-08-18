@@ -46,7 +46,7 @@ public class ExcelExporter<T> {
         WriteCellStyle contentWriteCellStyle = new WriteCellStyle();
         // 垂直居中,水平居中
         contentWriteCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-        contentWriteCellStyle.setHorizontalAlignment(HorizontalAlignment.CENTER);
+        contentWriteCellStyle.setHorizontalAlignment(HorizontalAlignment.LEFT);
         contentWriteCellStyle.setBorderLeft(BorderStyle.THIN);
         contentWriteCellStyle.setBorderTop(BorderStyle.THIN);
         contentWriteCellStyle.setBorderRight(BorderStyle.THIN);
@@ -61,7 +61,8 @@ public class ExcelExporter<T> {
         response.setContentType("application/octet-stream; charset=UTF-8");
         ExcelWriter writer = new ExcelWriterBuilder()
                 .autoCloseStream(true)
-                .automaticMergeHead(false)
+                // automaticMergeHead属性一定要设置为true，否则无法实现表头列合并
+                .automaticMergeHead(true)
                 .excelType(ExcelTypeEnum.XLSX)
                 .file(response.getOutputStream())
                 .head(header)
